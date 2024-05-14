@@ -3,13 +3,13 @@ package my.rooms.vif.controller;
 import my.rooms.vif.model.Room;
 import my.rooms.vif.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static java.util.Objects.nonNull;
+import static java.util.Objects.isNull;
 
 @RestController
 public class RoomController {
@@ -18,20 +18,35 @@ public class RoomController {
     private RoomService roomService;
 
     @GetMapping("/rooms")
-    public List<Room> getAllRooms()
-    {
-        return roomService.getAllRooms();
+    public ResponseEntity<List<Room>> getAllRooms() {
+        return ResponseEntity.ok(roomService.getAllRooms());
     }
 
     @GetMapping("/rooms/{code}")
-    public Room getRoom(@PathVariable(required = true) String code)
-    {
-        return roomService.getRoomByCode(code);
+    public ResponseEntity<Room> getRoom(@PathVariable(required = true) String code) {
+        return ResponseEntity.ok(roomService.getRoomByCode(code));
     }
 
     @GetMapping("/rooms/{code}/exist")
-    public Boolean isRoomExist(@PathVariable(required = true) String code)
-    {
-        return nonNull(roomService.getRoomByCode(code));
+    public ResponseEntity<Boolean> isRoomExist(@PathVariable(required = true) String code) {
+        return ResponseEntity.ok(roomService.existsByCode(code));
+    }
+
+    @PostMapping("/rooms")
+    public ResponseEntity<String> createRoom(@RequestBody Room room) {
+        if (roomService.existsByTitle(room.getTitle()) || isNull(room.getTitle())) {
+            return ResponseEntity.badRequest().body("Title is null or not unique");
+        }
+        return ResponseEntity.ok(roomService.createRoom(room));
+    }
+
+    @DeleteMapping("/rooms/{code}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable(required = true) String code) {
+        if (roomService.existsByCode(code)) {
+            roomService.deleteByCode(code);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

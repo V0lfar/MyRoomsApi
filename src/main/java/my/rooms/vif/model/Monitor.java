@@ -1,7 +1,6 @@
 package my.rooms.vif.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,6 +20,8 @@ public class Monitor {
     private Room room;
     @Transient
     private String url;
+    @Transient
+    private byte[] file;
 
     @PostLoad
     private void fillUrl() {
@@ -57,5 +58,13 @@ public class Monitor {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 }

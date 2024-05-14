@@ -9,4 +9,10 @@ import my.rooms.vif.model.Room;
 public interface RoomRepository extends ListCrudRepository<Room, Long> {
     
     Room findByCode(String code);
+
+    boolean existsByCode(String code);
+
+    boolean existsByTitle(String title);
+
+    void deleteByCode(String code);
 }
