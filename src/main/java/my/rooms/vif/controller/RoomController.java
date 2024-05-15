@@ -17,21 +17,25 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/rooms")
     public ResponseEntity<List<Room>> getAllRooms() {
         return ResponseEntity.ok(roomService.getAllRooms());
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/rooms/{code}")
     public ResponseEntity<Room> getRoom(@PathVariable(required = true) String code) {
         return ResponseEntity.ok(roomService.getRoomByCode(code));
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/rooms/{code}/exist")
     public ResponseEntity<Boolean> isRoomExist(@PathVariable(required = true) String code) {
         return ResponseEntity.ok(roomService.existsByCode(code));
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/rooms")
     public ResponseEntity<String> createRoom(@RequestBody Room room) {
         if (roomService.existsByTitle(room.getTitle()) || isNull(room.getTitle())) {
@@ -40,6 +44,7 @@ public class RoomController {
         return ResponseEntity.ok(roomService.createRoom(room));
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @DeleteMapping("/rooms/{code}")
     public ResponseEntity<Void> deleteRoom(@PathVariable(required = true) String code) {
         if (roomService.existsByCode(code)) {
