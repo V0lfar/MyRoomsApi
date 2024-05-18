@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static java.util.Objects.isNull;
+import static org.hibernate.internal.util.StringHelper.isBlank;
 
 @RestController
 public class RoomController {
@@ -19,8 +20,9 @@ public class RoomController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/rooms")
-    public ResponseEntity<List<Room>> getAllRooms() {
-        return ResponseEntity.ok(roomService.getAllRooms());
+    public ResponseEntity<List<Room>> getRooms(@RequestParam(defaultValue = "") String term,
+                                               @RequestParam(defaultValue = "name-asc") String sort) {
+        return isBlank(term) ? ResponseEntity.ok(roomService.getAllRooms(sort)) : ResponseEntity.ok(roomService.searchRoomByTerm(term, sort));
     }
 
     @CrossOrigin(origins = "http://localhost:3000")

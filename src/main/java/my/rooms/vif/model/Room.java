@@ -3,6 +3,7 @@ package my.rooms.vif.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,6 +17,9 @@ public class Room {
     private String code;
     @Column(nullable = false, unique = true)
     private String title;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date time;
+
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Monitor> monitors;
@@ -42,6 +46,14 @@ public class Room {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date creationTime) {
+        this.time = creationTime;
     }
 
     public List<Monitor> getMonitors() {
