@@ -28,7 +28,8 @@ public class RoomController {
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/rooms/{code}")
     public ResponseEntity<Room> getRoom(@PathVariable(required = true) String code) {
-        return ResponseEntity.ok(roomService.getRoomByCode(code));
+        final Room room = roomService.getRoomByCode(code);
+        return isNull(room) ? ResponseEntity.notFound().build() : ResponseEntity.ok(room);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
