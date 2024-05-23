@@ -41,7 +41,7 @@ public class RoomController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/rooms")
     public ResponseEntity<String> createRoom(@RequestBody Room room) {
-        if (roomService.existsByTitle(room.getTitle()) || isNull(room.getTitle())) {
+        if (roomService.existsByTitle(room.getTitle()) || isBlank(room.getTitle())) {
             return ResponseEntity.badRequest().body("Title is null or not unique");
         }
         return ResponseEntity.ok(roomService.createRoom(room));
